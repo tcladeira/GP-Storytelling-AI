@@ -1,5 +1,5 @@
 import random
-import matplotlib.pyplot as plt
+
 
 class Node:
     def __init__(self, value):
@@ -12,7 +12,7 @@ class Node:
     def is_terminal(self):
         return len(self.children) == 0
 
-    def __repr__(self):
-        return f"Node({self.name})"
 
+n1 = Node("And so the story begins")
 
+print (n1.value)
