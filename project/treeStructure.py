@@ -4,9 +4,9 @@ import regex
 import nltk
 
 class Node:
-    def __init__(self, value):
+    def __init__(self, value, children=None):
         self.value = value
-        self.children = []
+        self.children = children or []
 
     def add_child(self, child_node):
         self.children.append(child_node)
