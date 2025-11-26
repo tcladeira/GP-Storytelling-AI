@@ -21,3 +21,5 @@ n1.add_child(n2)
 print (n1.value)
 print (n1.children[0].value)
 
+print (n1.is_terminal())
+print (n2.is_terminal())
