@@ -14,5 +14,7 @@ class Node:
 
 
 n1 = Node("And so the story begins")
-
+n2 = Node("Once upon a time")
+n1.add_child(n2)
 print (n1.value)
+print (n1.children[0].value)
