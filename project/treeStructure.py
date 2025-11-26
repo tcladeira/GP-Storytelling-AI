@@ -1,5 +1,7 @@
 import random
-
+import  matplotlib.pyplot as plt
+import regex
+import nltk
 
 class Node:
     def __init__(self, value):
@@ -18,3 +20,4 @@ n2 = Node("Once upon a time")
 n1.add_child(n2)
 print (n1.value)
 print (n1.children[0].value)
+
