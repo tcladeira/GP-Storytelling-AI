@@ -6,16 +6,16 @@ from collections import defaultdict
 
 class MarkovChain:
     def __init__(self):
-        self.model = defaultdict(list)
+        self.model = defaultdict(list)      #this is the Markov map that will describe the word transition "Once" -> ["upon", "there", ...]
         self.starts = []
     
-    def educate(self, text):
+    def educate(self, text):        #first we break down the text into sentences.
         if isinstance(text, str):
-            sentences = nltk.sent_tokenize(text)
+            sentences = nltk.sent_tokenize(text)    #this nltk function is used to split the text into sentences. 
         else:
             sentences = text
         
-        for sentence in sentences:
+        for sentence in sentences:      #second, here, we break down each sentence into words.
             words = nltk.word_tokenize(sentence)
             if len(words) > 1:
                 self.starts.append(words[0])
@@ -36,8 +36,8 @@ class MarkovChain:
             if current_word not in self.model:
                 break
             next_word = random.choice(self.model[current_word])
-            current_word = random.choice(self.model[next_word])
-            sentence.append(current_word)
+            sentence.append(next_word)
+            current_word = next_word
         
         return ' '.join(sentence)
 
