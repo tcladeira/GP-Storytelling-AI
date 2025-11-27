@@ -40,3 +40,17 @@ class MarkovChain:
             sentence.append(current_word)
         
         return ' '.join(sentence)
+
+#arbitrary text generated for testing
+text = """
+Once upon a time in a land far, far away, there lived a young princess who dreamed of adventure. 
+Every day, she would gaze out of her castle window, longing to explore the world beyond the walls. 
+One day, a mysterious traveler arrived at the castle gates, bringing tales of distant lands and hidden treasures. 
+The princess knew that this was her chance to embark on the journey she had always dreamed of. 
+With a heart full of courage and excitement, she bid farewell to her family and set off on an adventure that would change her life forever.
+"""
+
+markovmodel = MarkovChain()
+markovmodel.educate(text)
+generated_sentence = markovmodel.generate_sentence()
+print("Generated Sentence:", generated_sentence)
