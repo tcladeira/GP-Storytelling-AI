@@ -25,6 +25,11 @@ class Node:
         new_node.children = [child.copy() for child in self.children]
         return new_node
     
+    def depth(self):
+        if self.is_terminal():
+            return 1
+        return 1 + max(child.depth() for child in self.children)
+    
     def __str__(self):
         if self.is_terminal():
             return str(self.value)
@@ -39,4 +44,6 @@ n1.add_child(n2)
 print(n1)
 n3 = n1.children[0].copy()
 print(n3)
+print("Depth of tree:", n1.depth())
+print("Depth of copied node:", n3.depth())
 
