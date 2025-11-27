@@ -20,6 +20,11 @@ class Node:
             nodes.extend(child.get_all_nodes())
         return nodes
     
+    def copy(self):
+        new_node = Node(self.value)
+        new_node.children = [child.copy() for child in self.children]
+        return new_node
+    
     def __str__(self):
         if self.is_terminal():
             return str(self.value)
@@ -27,10 +32,11 @@ class Node:
 
 
 #test cases
-tree1 = Node("root", [Node("B"), Node("C", [Node("D"), Node("E")])])
-print(tree1) 
 
-tree2 = tree1.get_all_nodes()
-for node in tree2:
-    print(node) 
-print(tree2[0])
+n1 = Node("And so the story begins.")
+n2 = Node("Luke, I am your father.")
+n1.add_child(n2)
+print(n1)
+n3 = n1.children[0].copy()
+print(n3)
+
