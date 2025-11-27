@@ -7,7 +7,7 @@ class Node:
     def __init__(self, value, children=None):
         self.value = value
         self.children = children or []
-
+ 
     def add_child(self, child_node):
         self.children.append(child_node)
 
@@ -21,9 +21,9 @@ class Node:
         return nodes
     
     def copy(self):
-        new_node = Node(self.value)
-        new_node.children = [child.copy() for child in self.children]
-        return new_node
+        new_copy = Node(self.value)
+        new_copy.children = [child.copy() for child in self.children]
+        return new_copy
     
     def depth(self):
         if self.is_terminal():
@@ -34,16 +34,3 @@ class Node:
         if self.is_terminal():
             return str(self.value)
         return f"{self.value} ({', '.join(str(child) for child in self.children)})"
-
-
-#test cases
-
-n1 = Node("And so the story begins.")
-n2 = Node("Luke, I am your father.")
-n1.add_child(n2)
-print(n1)
-n3 = n1.children[0].copy()
-print(n3)
-print("Depth of tree:", n1.depth())
-print("Depth of copied node:", n3.depth())
-
