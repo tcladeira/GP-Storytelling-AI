@@ -14,6 +14,12 @@ class Node:
     def is_terminal(self):
         return len(self.children) == 0
     
+    def get_all_nodes(self):
+        nodes = [self]
+        for child in self.children:
+            nodes.extend(child.get_all_nodes())
+        return nodes
+    
     def __str__(self):
         if self.is_terminal():
             return str(self.value)
@@ -21,14 +27,10 @@ class Node:
 
 
 #test cases
-n1 = Node("And so the story begins")
-n2 = Node("Once upon a time")
-n1.add_child(n2)
-print (n1.value)
-print (n1.children[0].value)
+tree1 = Node("root", [Node("B"), Node("C", [Node("D"), Node("E")])])
+print(tree1) 
 
-print(n1.is_terminal())
-print(n2.is_terminal())
-
-print(n1)
-print(n2)
+tree2 = tree1.get_all_nodes()
+for node in tree2:
+    print(node) 
+print(tree2[0])
