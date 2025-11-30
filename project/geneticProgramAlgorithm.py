@@ -12,11 +12,11 @@ def evaluate_tree(node):
     if node.is_terminal():
         return node.value
     
-    function_name = FUNCTION_SET[node.value]
-    function_info = function_name["function"]
+    function_info = FUNCTION_SET[node.value]["function"]
     
     for child in node.children:
         child_values = evaluate_tree(child)
+
     return function_info(*child_values)
 
 def generate_random_tree(depth, current_depth=0):
@@ -34,8 +34,10 @@ def generate_random_tree(depth, current_depth=0):
     children = []
 
     for _ in range(level_tree):
-        children = generate_random_tree(depth, current_depth + 1)
-        return Node(func_name, children)
+        child = generate_random_tree(depth, current_depth + 1)
+        children.append(child)
+    
+    return Node(func_name, children)
 
 
 FUNCTION_SET = {
@@ -53,14 +55,6 @@ SIMPLE_TEXT = [
 ]
 
 
-tree = generate_random_tree(max_depth=3)
-
-def check_structure(node):
-    if not isinstance(node.children, list):
-        print("ERROR: children is not a list:", node, "->", node.children)
-    else:
-        for child in node.children:
-            check_structure(child)
-
-check_structure(tree)
-print("Check complete.")
+tree = generate_random_tree(3)
+print(tree)
+print(evaluate_tree(tree))
