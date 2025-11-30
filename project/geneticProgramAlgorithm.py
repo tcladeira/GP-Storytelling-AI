@@ -8,14 +8,23 @@ def combine_story(a, b):
 def generate_endnode():
     return random.choice(SIMPLE_TEXT)
 
-def generate_random_tree(depth):
-    if depth == 0:
-        return Node(random.choice(SIMPLE_TEXT))
+def generate_random_tree(depth, current_depth=0):
+    if current_depth >= depth:     #base case: stop recursion at max depth
+        value = generate_endnode()
+        return Node(value)
     
-    func_name = random.choice(list(FUNCTION_SET.keys()))
-    func_info = FUNCTION_SET[func_name]
-    children = [generate_random_tree(depth - 1) for _ in range(func_info["level"])]
-    return Node(func_name, children)
+    if random.random() < 0.25:  #chance of creating end node before reaching max depth
+        value = generate_endnode()
+        return Node(value)
+
+    func_name = random.choice(list(FUNCTION_SET.keys()))   #if our tree creation did not stop yet (1/4 chance), then we expand it
+    level_tree = FUNCTION_SET[func_name]["level"]
+
+    children = []
+
+    for _ in range(level_tree):
+        children = generate_random_tree(depth, current_depth + 1)
+        return Node(func_name, children)
 
 
 FUNCTION_SET = {
