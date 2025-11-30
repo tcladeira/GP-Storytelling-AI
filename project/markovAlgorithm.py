@@ -20,7 +20,7 @@ class MarkovChain:
             if len(words) > 1:
                 self.starts.append(words[0])
             
-            for i in range(len(words) - 1):
+            for i in range(len(words) - 1):   #create the map of word transitions here. Probability = frequency of occurrence.
                 current_word = words[i]
                 next_word = words[i + 1]
                 self.model[current_word].append(next_word)
