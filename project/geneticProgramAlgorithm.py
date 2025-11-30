@@ -14,8 +14,7 @@ def evaluate_tree(node):
     
     function_info = FUNCTION_SET[node.value]["function"]
     
-    for child in node.children:
-        child_values = evaluate_tree(child)
+    child_values = [evaluate_tree(child) for child in node.children]
 
     return function_info(*child_values)
 
