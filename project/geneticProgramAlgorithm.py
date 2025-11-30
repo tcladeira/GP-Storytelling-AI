@@ -8,6 +8,17 @@ def combine_story(a, b):
 def generate_endnode():
     return random.choice(SIMPLE_TEXT)
 
+def evaluate_tree(node):
+    if node.is_terminal():
+        return node.value
+    
+    function_name = FUNCTION_SET[node.value]
+    function_info = function_name["function"]
+    
+    for child in node.children:
+        child_values = evaluate_tree(child)
+    return function_info(*child_values)
+
 def generate_random_tree(depth, current_depth=0):
     if current_depth >= depth:     #base case: stop recursion at max depth
         value = generate_endnode()
@@ -30,7 +41,7 @@ def generate_random_tree(depth, current_depth=0):
 FUNCTION_SET = {
     "COMBINE": {
         "level": 2,
-        "func": combine_story
+        "function": combine_story
     }
 }
 
@@ -41,4 +52,15 @@ SIMPLE_TEXT = [
     "the journey begins",
 ]
 
-print(generate_endnode())
+
+tree = generate_random_tree(max_depth=3)
+
+def check_structure(node):
+    if not isinstance(node.children, list):
+        print("ERROR: children is not a list:", node, "->", node.children)
+    else:
+        for child in node.children:
+            check_structure(child)
+
+check_structure(tree)
+print("Check complete.")
