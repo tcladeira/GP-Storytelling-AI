@@ -48,8 +48,10 @@ def main():
     parent1, parent2 = select_parents(population, fitness_function)
     print("Parent 1 Tree:", parent1)
     print("Parent 1 Story:", evaluate_tree(parent1))
+    print("Parent 1 Fitness Score:", fitness_function(parent1))
     print("Parent 2 Tree:", parent2)
     print("Parent 2 Story:", evaluate_tree(parent2))
+    print("Parent 2 Fitness Score:", fitness_function(parent2))
 
 if __name__ == "__main__":
     main()
