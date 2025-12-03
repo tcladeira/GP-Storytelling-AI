@@ -2,12 +2,21 @@ import random
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
 
+MARKOV_MODEL = None
+
+
+def setup_markov_model(model: MarkovChain):
+    global MARKOV_MODEL
+    MARKOV_MODEL = model
 
 def combine_story(a, b):
     return a + " " + b
 
 def generate_endnode():
-    return random.choice(SIMPLE_TEXT)
+    if MARKOV_MODEL is not None:
+        return MARKOV_MODEL.generate_sentence(max_length=8)
+    else:
+        return random.choice(SIMPLE_TEXT)
 
 def evaluate_tree(node):
     if node.is_terminal():
@@ -54,7 +63,3 @@ SIMPLE_TEXT = [
     "the journey begins",
 ]
 
-
-tree = generate_random_tree(3)
-print(tree)
-print(evaluate_tree(tree))
