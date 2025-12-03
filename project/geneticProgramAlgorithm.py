@@ -67,3 +67,9 @@ def initialize_population(population_size, tree_depth):
         tree = generate_random_tree(tree_depth)
         population.append(tree)
     return population
+
+##Create fitness function
+def fitness_function(tree):
+    story = evaluate_tree(tree)
+    word_count = len(story.split())
+    return word_count
