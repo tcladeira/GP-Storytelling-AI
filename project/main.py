@@ -5,6 +5,8 @@ from geneticProgramAlgorithm import (
     setup_markov_model,
     initialize_population,
     fitness_function,
+    mortal_kombat,
+    select_parents,
 )
 
 def main():
@@ -17,13 +19,13 @@ def main():
     With a heart full of courage and excitement, she bid farewell to her family and set off on an adventure that would change her life forever.
     """
     
+    ##markov model setup
     markov = MarkovChain()
     markov.educate(text)
-
     setup_markov_model(markov)
 
-    #construct a random tree
-    population = initialize_population(5, 3)
+    #construct a random population
+    population = initialize_population(6, 3)
 
     print("Generated Stories from Population:")
     for i, t in enumerate(population):
@@ -35,6 +37,19 @@ def main():
     for i, t in enumerate(population):
         score = fitness_function(t)
         print(f"Tree {i + 1} Fitness: {score}")
+
+    print("\nMortal Kombat Tournament:")
+    winner = mortal_kombat(population, fitness_function)
+    print("Winner Tree:", winner)
+    print("Winner Story:", evaluate_tree(winner))
+    print("\nWinner Fitness Score:", fitness_function(winner))
+
+    print("\nSelecting Parents for Crossover:")
+    parent1, parent2 = select_parents(population, fitness_function)
+    print("Parent 1 Tree:", parent1)
+    print("Parent 1 Story:", evaluate_tree(parent1))
+    print("Parent 2 Tree:", parent2)
+    print("Parent 2 Story:", evaluate_tree(parent2))
 
 if __name__ == "__main__":
     main()
