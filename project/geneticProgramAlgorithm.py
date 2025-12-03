@@ -1,4 +1,5 @@
 import random
+from markovAlgorithm import MarkovChain
 from treeStructure import Node
 
 
