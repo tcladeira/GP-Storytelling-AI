@@ -73,3 +73,15 @@ def fitness_function(tree):
     story = evaluate_tree(tree)
     word_count = len(story.split())
     return word_count
+
+def fitness_key(pair):
+    return pair[1]
+
+##Create the MORTAL KOMBAT!!! TANDANDANDANDDDAAAAAN
+
+
+def mortal_kombat(population, fitness_function, torunament_size=3):
+    figheters = random.sample(population, torunament_size)
+    fatality_scores = [(fighter, fitness_function(fighter)) for fighter in figheters]
+    winner = max(fatality_scores, key=fitness_key)[0]    ##select only the fitness score for comparison
+    return winner
