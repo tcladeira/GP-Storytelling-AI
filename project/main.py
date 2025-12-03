@@ -3,6 +3,7 @@ from geneticProgramAlgorithm import (
     generate_random_tree,
     evaluate_tree,
     setup_markov_model,
+    initialize_population
 )
 
 def main():
@@ -21,12 +22,13 @@ def main():
     setup_markov_model(markov)
 
     #construct a random tree
-    tree = generate_random_tree(depth=3)
-    print("Generated tree:")
-    print(tree)
+    population = initialize_population(5, 3)
 
-    print("\nGenerated story:")
-    story = evaluate_tree(tree)
-    print(story)
+    print("Generated Stories from Population:")
+    for i, t in enumerate(population):
+        print(f"\nTree {i + 1}:")
+        print(t)
+        print("Evaluated Story:", evaluate_tree(t))
+
 if __name__ == "__main__":
     main()
