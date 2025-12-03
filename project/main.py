@@ -3,7 +3,8 @@ from geneticProgramAlgorithm import (
     generate_random_tree,
     evaluate_tree,
     setup_markov_model,
-    initialize_population
+    initialize_population,
+    fitness_function,
 )
 
 def main():
@@ -29,6 +30,11 @@ def main():
         print(f"\nTree {i + 1}:")
         print(t)
         print("Evaluated Story:", evaluate_tree(t))
+    
+    print ("\nFitness Scores:")
+    for i, t in enumerate(population):
+        score = fitness_function(t)
+        print(f"Tree {i + 1} Fitness: {score}")
 
 if __name__ == "__main__":
     main()
