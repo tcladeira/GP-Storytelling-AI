@@ -88,4 +88,6 @@ def mortal_kombat(population, fitness_function, torunament_size=3):
 def select_parents(population, fitness_function, tournament_size=3):
     parent1 = mortal_kombat(population, fitness_function, tournament_size)
     parent2 = mortal_kombat(population, fitness_function, tournament_size)
+    while parent2 == parent1:
+        parent2 = mortal_kombat(population, fitness_function, tournament_size)
     return parent1, parent2
