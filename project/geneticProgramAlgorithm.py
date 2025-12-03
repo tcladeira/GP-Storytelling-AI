@@ -3,12 +3,15 @@ from markovAlgorithm import MarkovChain
 from treeStructure import Node
 
 MARKOV_MODEL = None
+SIMPLE_TEXT = []
 
-
+##Markov model to GP integration
 def setup_markov_model(model: MarkovChain):
     global MARKOV_MODEL
     MARKOV_MODEL = model
 
+
+##GP finction set for tree representation
 def combine_story(a, b):
     return a + " " + b
 
@@ -16,6 +19,7 @@ def generate_endnode():
     if MARKOV_MODEL is not None:
         return MARKOV_MODEL.generate_sentence(max_length=8)
     else:
+        global SIMPLE_TEXT
         return random.choice(SIMPLE_TEXT)
 
 def evaluate_tree(node):
@@ -56,4 +60,10 @@ FUNCTION_SET = {
     }
 }
 
-
+##GP population creation functiono
+def initialize_population(population_size, tree_depth):
+    population = []
+    for _ in range(population_size):
+        tree = generate_random_tree(tree_depth)
+        population.append(tree)
+    return population
