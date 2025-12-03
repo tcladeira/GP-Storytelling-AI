@@ -56,10 +56,4 @@ FUNCTION_SET = {
     }
 }
 
-SIMPLE_TEXT = [
-    "the hero wakes",
-    "the forest is silent",
-    "a shadow emerges",
-    "the journey begins",
-]
 
