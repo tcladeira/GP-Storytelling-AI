@@ -91,3 +91,5 @@ def select_parents(population, fitness_function, tournament_size=3):
     while parent2 == parent1:
         parent2 = mortal_kombat(population, fitness_function, tournament_size)
     return parent1, parent2
+
+##Crossover and Mutation functions 
