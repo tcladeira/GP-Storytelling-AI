@@ -60,6 +60,12 @@ FUNCTION_SET = {
     }
 }
 
+def print_tree(node, level=0):
+    indent = "  " * level
+    print(f"{indent}- {node.value}")
+    for child in node.children:
+        print_tree(child, level + 1)
+
 ##GP population creation functiono
 def initialize_population(population_size, tree_depth):
     population = []

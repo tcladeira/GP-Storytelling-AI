@@ -34,3 +34,4 @@ class Node:
         if self.is_terminal():
             return str(self.value)
         return f"{self.value} ({', '.join(str(child) for child in self.children)})"
+
