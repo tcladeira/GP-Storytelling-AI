@@ -92,7 +92,7 @@ def select_parents(population, fitness_function, tournament_size=3):
         parent2 = mortal_kombat(population, fitness_function, tournament_size)
     return parent1, parent2
 
-##Crossover and Mutation functions 
+##Crossover functions 
 def collect_all_nodes(node, parent=None, index_in_parent=None, result=None):
     if result is None:
         result = []
@@ -128,3 +128,16 @@ def crossover(parent1, parent2):
         new_child2 = copied_parent2
 
     return new_child1, new_child2
+
+##Mutation function
+def mutate(tree, max_depth):
+    tree_copy = tree.copy()
+
+    node, parent, index = pick_random_subtree(tree_copy)
+    mutant_tree = generate_random_tree(depth=max_depth, current_depth=0)
+
+    if parent is None:
+        return mutant_tree
+    else:
+        parent.children[index] = mutant_tree
+        return tree_copy
