@@ -93,3 +93,18 @@ def select_parents(population, fitness_function, tournament_size=3):
     return parent1, parent2
 
 ##Crossover and Mutation functions 
+def collect_all_nodes(node, parent=None, index_in_parent=None, result=None):
+    if result is None:
+        result = []
+    result.append((node, parent, index_in_parent))
+
+    if hasattr(node, 'children') and isinstance(node.children, list):
+        for index, child in enumerate(node.children):
+            collect_all_nodes(child, node, index, result)
+    return result
+
+def pick_random_subtree(tree):
+    all_nodes = collect_all_nodes(tree)
+    selected_node, parent, index_in_parent = random.choice(all_nodes)
+    return selected_node, parent, index_in_parent
+
