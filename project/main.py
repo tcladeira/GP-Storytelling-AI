@@ -1,14 +1,8 @@
 from markovAlgorithm import MarkovChain
 from geneticProgramAlgorithm import (
-    generate_random_tree,
     evaluate_tree,
     setup_markov_model,
-    initialize_population,
     fitness_function,
-    mortal_kombat,
-    select_parents,
-    crossover,
-    mutate,
     print_tree,
     run_evolution,
 
