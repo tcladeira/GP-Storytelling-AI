@@ -108,3 +108,23 @@ def pick_random_subtree(tree):
     selected_node, parent, index_in_parent = random.choice(all_nodes)
     return selected_node, parent, index_in_parent
 
+def crossover(parent1, parent2):
+    copied_parent1 = parent1.copy()
+    copied_parent2 = parent2.copy()
+
+    subtree1, parent_of_subtree1, index1 = pick_random_subtree(copied_parent1)
+    subtree2, parent_of_subtree2, index2 = pick_random_subtree(copied_parent2)
+
+    if parent_of_subtree1 is None:
+        new_child1 = subtree2.copy()
+    else:
+        parent_of_subtree1.children[index1] = subtree2.copy()
+        new_child1 = copied_parent1
+
+    if parent_of_subtree2 is None:
+        new_child2 = subtree1.copy()
+    else:
+        parent_of_subtree2.children[index2] = subtree1.copy()
+        new_child2 = copied_parent2
+
+    return new_child1, new_child2

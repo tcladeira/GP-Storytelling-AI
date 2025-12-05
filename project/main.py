@@ -7,6 +7,7 @@ from geneticProgramAlgorithm import (
     fitness_function,
     mortal_kombat,
     select_parents,
+    crossover,
 )
 
 def main():
@@ -52,6 +53,16 @@ def main():
     print("Parent 2 Tree:", parent2)
     print("Parent 2 Story:", evaluate_tree(parent2))
     print("Parent 2 Fitness Score:", fitness_function(parent2))
+
+    print("\nCrossover Result:")
+    child1, child2 = crossover(parent1, parent2)
+    print("Child Tree:", child1)
+    print("Child Story:", evaluate_tree(child1))
+    print("Child Fitness Score:", fitness_function(child1))
+    print("\nChild Tree:", child2)
+    print("Child Story:", evaluate_tree(child2))
+    print("Child Fitness Score:", fitness_function(child2))
+
 
 if __name__ == "__main__":
     main()
