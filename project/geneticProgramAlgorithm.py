@@ -5,6 +5,15 @@ from treeStructure import Node
 MARKOV_MODEL = None
 SIMPLE_TEXT = []
 
+##Arbitrary GP parameters
+POP_SIZE = 20
+MAX_DEPTH = 4
+TOURNAMENT_SIZE = 3
+CROSSOVER_RATE = 0.8
+MUTATION_RATE = 0.2
+GENERATIONS = 10
+
+
 ##Markov model to GP integration
 def setup_markov_model(model: MarkovChain):
     global MARKOV_MODEL
@@ -13,7 +22,7 @@ def setup_markov_model(model: MarkovChain):
 
 ##GP finction set for tree representation
 def combine_story(a, b):
-    return a + " " + b
+    return a + " . " + b
 
 def generate_endnode():
     if MARKOV_MODEL is not None:
@@ -147,3 +156,48 @@ def mutate(tree, max_depth):
     else:
         parent.children[index] = mutant_tree
         return tree_copy
+    
+##Create a function for Loop of the GP algorithm
+def evolve_population(population, fitness_function, crossover_rate, mutation_rate, tournament_size, max_depth):
+    new_population = []
+    while len(new_population) < len(population):
+        parent1, parent2 = select_parents(population, fitness_function, tournament_size)
+
+        if random.random() < crossover_rate:
+            child1, child2 = crossover(parent1, parent2)
+        else:
+            child1 = parent1.copy()
+            child2 = parent2.copy()
+
+        if random.random() < mutation_rate:
+            child1 = mutate(child1, max_depth)
+        if random.random() < mutation_rate:
+            child2 = mutate(child2, max_depth)
+
+        new_population.append(child1)
+        if len(new_population) < len(population):
+            new_population.append(child2)
+
+    return new_population
+
+def run_evolvetion(population_size, fitness_function, generations, tournament_size, max_depth):
+    population = initialize_population(population_size, max_depth)
+
+    for generation in range(generations):
+        print(f"\nGeneration {generation + 1}")
+        
+        scores = [fitness_function(individual) for individual in population]
+        best_score = max(scores)
+        avg_score = sum(scores) / len(scores)
+        print(f"Best Fitness: {best_score}")
+        print(f"Average Fitness: {avg_score}")
+
+        population = evolve_population(
+            population,
+            fitness_function,
+            max_depth,
+            tournament_size,
+            CROSSOVER_RATE,
+            MUTATION_RATE
+        )
+    return population

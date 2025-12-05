@@ -30,49 +30,6 @@ def main():
     #construct a random population
     population = initialize_population(6, 3)
 
-    
-
-    print("Generated Stories from Population:")
-    for i, t in enumerate(population):
-        print(f"\nTree {i + 1}:")
-        print("Evaluated Story:", evaluate_tree(t))
-        print_tree(t)
-    
-    # print ("\nFitness Scores:")
-    # for i, t in enumerate(population):
-    #     score = fitness_function(t)
-    #     print(f"Tree {i + 1} Fitness: {score}")
-
-    # print("\nMortal Kombat Tournament:")
-    # winner = mortal_kombat(population, fitness_function)
-    # print("Winner Tree:", winner)
-    # print("Winner Story:", evaluate_tree(winner))
-    # print("\nWinner Fitness Score:", fitness_function(winner))
-
-    # print("\nSelecting Parents for Crossover:")
-    # parent1, parent2 = select_parents(population, fitness_function)
-    # print("Parent 1 Tree:", parent1)
-    # print("Parent 1 Story:", evaluate_tree(parent1))
-    # print("Parent 1 Fitness Score:", fitness_function(parent1))
-    # print("Parent 2 Tree:", parent2)
-    # print("Parent 2 Story:", evaluate_tree(parent2))
-    # print("Parent 2 Fitness Score:", fitness_function(parent2))
-
-    # print("\nCrossover Result:")
-    # child1, child2 = crossover(parent1, parent2)
-    # print("Child 1 Tree:", child1)
-    # print("Child 1 Story:", evaluate_tree(child1))
-    # print("Child 1 Fitness Score:", fitness_function(child1))
-    # print("\nChild 2 Tree:", child2)
-    # print("Child 2 Story:", evaluate_tree(child2))
-    # print("Child 2 Fitness Score:", fitness_function(child2))
-
-    # print("\nMutation Result - Child 1:")
-    # mutated_child = mutate(child1, max_depth=3)
-    # print("Mutated Child Tree:", mutated_child)
-    # print("Mutated Child Story:", evaluate_tree(mutated_child))
-    # print("Mutated Child Fitness Score:", fitness_function(mutated_child))
-
 
 if __name__ == "__main__":
     main()
