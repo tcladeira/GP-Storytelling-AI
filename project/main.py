@@ -10,6 +10,8 @@ from geneticProgramAlgorithm import (
     crossover,
     mutate,
     print_tree,
+    run_evolution,
+
 )
 
 def main():
@@ -28,7 +30,19 @@ def main():
     setup_markov_model(markov)
 
     #construct a random population
-    population = initialize_population(6, 3)
+    population = run_evolution(
+        population_size = 10,
+        fitness_function = fitness_function,
+        generations = 5,
+        max_depth = 4,
+    )
+
+    best_tree = max(population, key=fitness_function)
+    print("\nBest Evolved Story Tree:")
+    print_tree(best_tree)
+    best_story = evaluate_tree(best_tree)
+    print("\nGenerated Story:")
+    print(best_story)
 
 
 if __name__ == "__main__":

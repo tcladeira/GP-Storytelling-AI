@@ -180,7 +180,7 @@ def evolve_population(population, fitness_function, crossover_rate, mutation_rat
 
     return new_population
 
-def run_evolvetion(population_size, fitness_function, generations, tournament_size, max_depth):
+def run_evolution(population_size, fitness_function, generations, max_depth):
     population = initialize_population(population_size, max_depth)
 
     for generation in range(generations):
@@ -195,9 +195,9 @@ def run_evolvetion(population_size, fitness_function, generations, tournament_si
         population = evolve_population(
             population,
             fitness_function,
-            max_depth,
-            tournament_size,
             CROSSOVER_RATE,
-            MUTATION_RATE
+            MUTATION_RATE,
+            tournament_size=TOURNAMENT_SIZE,
+            max_depth=max_depth
         )
     return population
