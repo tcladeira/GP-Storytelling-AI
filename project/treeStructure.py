@@ -1,7 +1,3 @@
-import random
-import  matplotlib.pyplot as plt
-import regex
-import nltk
 
 class Node:
     def __init__(self, value, children=None):
