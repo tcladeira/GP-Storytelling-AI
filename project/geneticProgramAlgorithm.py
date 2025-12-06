@@ -1,16 +1,22 @@
 import random
-import nltk 
+import re
 import os
 import language_tool_python
+from sentence_transformers import SentenceTransformer, util
+coherence_model = SentenceTransformer('all-MiniLM-L6-v2')
 from clean_text import clean_text
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
+import nltk
+from nltk.tokenize import sent_tokenize
 
 MARKOV_MODEL = None
 SIMPLE_TEXT = []
 smooth = SmoothingFunction().method1
 grammar_tool = language_tool_python.LanguageTool('en-US')
+
+REAL_SENTENCES = []
 
 ##Arbitrary GP parameters
 POP_SIZE = 20
@@ -20,10 +26,15 @@ CROSSOVER_RATE = 0.8
 MUTATION_RATE = 0.2
 GENERATIONS = 10
 
-SELF_BLEU_WEIGHT = 25.0
-LEIGHT_SCORE_WEIGHT = 0.8
+SELF_BLEU_WEIGHT = 30.0
+LEIGHT_SCORE_WEIGHT = 0.1
 GRAMMAR_WEIGHT = 1.0
+COHERENCE_SCORE_WEIGHT = 150.0
 
+
+def setup_terminal_sentences(text):
+    global REAL_SENTENCES
+    REAL_SENTENCES = text
 
 ##Markov model to GP integration
 def setup_markov_model(model: MarkovChain):
@@ -36,11 +47,10 @@ def combine_story(a, b):
     return a + " " + b
 
 def generate_endnode():
-    if MARKOV_MODEL is not None:
-        sentence = MARKOV_MODEL.generate_sentence(max_length=15)
-        return sentence.strip()
+    if REAL_SENTENCES:
+        return random.choice(REAL_SENTENCES)
     else:
-        return random.choice(SIMPLE_TEXT)
+        return MARKOV_MODEL.generate_sentence()
 
 def evaluate_tree(node):
     if node.is_terminal():
@@ -108,7 +118,10 @@ def fitness_function(tree, all_stories=None, self_bleu_score=None, index=None):
     grammar_error = grammar_check(story)
     grammar_penalty = GRAMMAR_WEIGHT * grammar_error
 
-    fitness_score = lenghth_score_weighted - diversity_penalty - grammar_penalty
+    coherence = evaluate_coherence(story)
+    coherence_bonus = COHERENCE_SCORE_WEIGHT * coherence
+
+    fitness_score = (lenghth_score_weighted - diversity_penalty - grammar_penalty + coherence_bonus)
 
     return fitness_score
 
@@ -304,3 +317,33 @@ def load_book_to_markov(filename):
         text = file.read()
     cleanned_text = clean_text(text)
     return cleanned_text
+
+##function to evaluate coherence using sentence transformers
+def evaluate_coherence(story):
+
+    sentences = re.split(r'[.!?]+', story)
+    sentences = [s.strip() for s in sentences if s.strip()]
+
+    if len(sentences) < 2:
+        return 0.0
+    
+    embeddings = coherence_model.encode(sentences)
+    total_similarity = 0.0
+    count = 0
+
+    for i in range(len(embeddings) - 1):
+        sim = float(util.cos_sim(embeddings[i], embeddings[i + 1]))
+        total_similarity += sim
+        count += 1
+    return total_similarity / count
+
+
+def extract_real_sentences(text, minimum_length=5, max_sentence_words=40):
+    sentences = sent_tokenize(text)
+    clean = []
+    for sentence in sentences:
+        sentence = sentence.strip()
+        count = len(sentence.split())
+        if minimum_length <= count <= max_sentence_words:
+            clean.append(sentence)
+    return clean
