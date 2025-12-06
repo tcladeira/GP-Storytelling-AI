@@ -2,6 +2,7 @@ import random
 import nltk 
 import os
 import language_tool_python
+from clean_text import clean_text
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
@@ -36,9 +37,11 @@ def combine_story(a, b):
 
 def generate_endnode():
     if MARKOV_MODEL is not None:
-        return MARKOV_MODEL.generate_sentence(max_length=8)
+        sentence = MARKOV_MODEL.generate_sentence(max_length=12)
+        if not sentence.endswith('.'):
+            sentence += '.'
+        return sentence
     else:
-        global SIMPLE_TEXT
         return random.choice(SIMPLE_TEXT)
 
 def evaluate_tree(node):
@@ -301,4 +304,5 @@ def load_book_to_markov(filename):
 
     with open(file_path, 'r', encoding='utf-8') as file:
         text = file.read()
-    return text
+    cleanned_text = clean_text(text)
+    return cleanned_text
