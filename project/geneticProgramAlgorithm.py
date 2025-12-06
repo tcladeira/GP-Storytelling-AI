@@ -89,10 +89,15 @@ def initialize_population(population_size, tree_depth):
     return population
 
 ##Create fitness function
-def fitness_function(tree):
+def fitness_function(tree, all_stories=None, self_bleu_score=None, index=None):
     story = evaluate_tree(tree)
-    word_count = len(story.split())
-    return word_count
+    lenghth_score = len(story.split())
+
+    if self_bleu_score is None or index is None:
+        return lenghth_score
+    
+    diversity_penalty = SELF_BLEU_WEIGHT * self_bleu_score[index]
+    return lenghth_score - diversity_penalty
 
 def fitness_key(pair):
     return pair[1]
@@ -163,10 +168,15 @@ def mutate(tree, max_depth):
         return tree_copy
     
 ##Create a function for Loop of the GP algorithm
-def evolve_population(population, fitness_function, crossover_rate, mutation_rate, tournament_size, max_depth):
+def evolve_population(population, fitness_function, stories, self_bleu_score, max_depth, tournament_size, crossover_rate, mutation_rate):
+    def indexed_fitness_function(individual):
+        index = population.index(individual)
+        return fitness_function(individual, stories, self_bleu_score, index)
+    
     new_population = []
+    
     while len(new_population) < len(population):
-        parent1, parent2 = select_parents(population, fitness_function, tournament_size)
+        parent1, parent2 = select_parents(population, indexed_fitness_function, tournament_size)
 
         if random.random() < crossover_rate:
             child1, child2 = crossover(parent1, parent2)
@@ -186,24 +196,24 @@ def evolve_population(population, fitness_function, crossover_rate, mutation_rat
     return new_population
 
 def run_evolution(population_size, fitness_function, generations, max_depth):
-    population = initialize_population(population_size, max_depth)
+    stories = [evaluate_tree(individual) for individual in population]
+    self_bleu_scores = compute_self_bleu_individual(stories)
+    fitness_score = [
+        fitness_function(population[i], stories, self_bleu_scores, i)
+        for i in range(len(population))
+    ]
+    best = max(fitness_score)
+    print(f"Best Fitness Score: {best}")
 
-    for generation in range(generations):
-        print(f"\nGeneration {generation + 1}")
-        
-        scores = [fitness_function(individual) for individual in population]
-        best_score = max(scores)
-        avg_score = sum(scores) / len(scores)
-        print(f"Best Fitness: {best_score}")
-        print(f"Average Fitness: {avg_score}")
-
-        population = evolve_population(
+    population = evolve_population(
             population,
             fitness_function,
+            stories,
+            self_bleu_scores,
+            max_depth,
+            tournament_size,
             CROSSOVER_RATE,
-            MUTATION_RATE,
-            tournament_size=TOURNAMENT_SIZE,
-            max_depth=max_depth
+            MUTATION_RATE
         )
     return population
 
