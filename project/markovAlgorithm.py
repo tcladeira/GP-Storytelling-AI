@@ -36,5 +36,15 @@ class MarkovChain:
             next_word = random.choice(self.model[current_word])
             sentence.append(next_word)
             current_word = next_word
+
+            if next_word in ['.', '!', '?']:
+                break
+
+        text = " ".join(sentence)
+
+        if text[-1] not in ['.', '!', '?']:
+            text += '.'
         
-        return ' '.join(sentence)
+        text = text[0].upper() + text[1:]
+        
+        return text

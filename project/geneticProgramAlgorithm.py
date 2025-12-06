@@ -37,10 +37,8 @@ def combine_story(a, b):
 
 def generate_endnode():
     if MARKOV_MODEL is not None:
-        sentence = MARKOV_MODEL.generate_sentence(max_length=12)
-        if not sentence.endswith('.'):
-            sentence += '.'
-        return sentence
+        sentence = MARKOV_MODEL.generate_sentence(max_length=15)
+        return sentence.strip()
     else:
         return random.choice(SIMPLE_TEXT)
 
