@@ -1,5 +1,6 @@
 import random
 import nltk 
+import os
 import language_tool_python
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
@@ -292,3 +293,12 @@ def compute_self_bleu_individual(stories):
 def grammar_check(story):
     matches = grammar_tool.check(story)
     return len(matches)
+
+##function to load the book to the markvov chain
+def load_book_to_markov(filename):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_dir, filename)
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        text = file.read()
+    return text

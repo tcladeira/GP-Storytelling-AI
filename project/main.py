@@ -8,23 +8,26 @@ from geneticProgramAlgorithm import (
     compute_self_bleu_population,
     initialize_population,
     compute_self_bleu_individual,
-    grammar_check
+    grammar_check,
+    load_book_to_markov,
 
 )
 
 def main():
     #arbitrary text to educate the Markov model
-    text = """
+    text1 = """
     Once upon a time in a land far, far away, there lived a young princess who dreamed of adventure.
     Every day, she would gaze out of her castle window, longing to explore the world beyond the walls.
     One day, a mysterious traveler arrived at the castle gates, bringing tales of distant lands and hidden treasures.
     The princess knew that this was her chance to embark on the journey she had always dreamed of.
     With a heart full of courage and excitement, she bid farewell to her family and set off on an adventure that would change her life forever.
     """
+
+    text2 = load_book_to_markov("booksample.txt")
     
     ##markov model setup
     markov = MarkovChain()
-    markov.educate(text)
+    markov.educate(text2)
     setup_markov_model(markov)
 
     final_pop = run_evolution(
