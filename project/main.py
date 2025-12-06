@@ -5,6 +5,9 @@ from geneticProgramAlgorithm import (
     fitness_function,
     print_tree,
     run_evolution,
+    compute_self_bleu_population,
+    initialize_population,
+    compute_self_bleu_individual,
 
 )
 
@@ -23,21 +26,19 @@ def main():
     markov.educate(text)
     setup_markov_model(markov)
 
-    #construct a random population
-    population = run_evolution(
-        population_size = 10,
-        fitness_function = fitness_function,
-        generations = 5,
-        max_depth = 4,
-    )
+    population = initialize_population(5, 3)
+    stories = [evaluate_tree(t) for t in population]
+    self_bleu_scores = compute_self_bleu_individual(stories)
 
-    best_tree = max(population, key=fitness_function)
-    print("\nBest Evolved Story Tree:")
-    print_tree(best_tree)
-    best_story = evaluate_tree(best_tree)
-    print("\nGenerated Story:")
-    print(best_story)
+    print("=== Initial Stories ===")
+    for index, s in enumerate(stories):
+        print("\nStory ", index, ":", s)
 
+    print("\n=== Stories ===")
+    for i, s in enumerate(self_bleu_scores):
+        print(f"Story {i+1}: {s}")
+
+  
 
 if __name__ == "__main__":
     main()

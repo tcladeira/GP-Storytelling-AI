@@ -16,6 +16,8 @@ CROSSOVER_RATE = 0.8
 MUTATION_RATE = 0.2
 GENERATIONS = 10
 
+SELF_BLEU_WEIGHT = 5.0
+
 
 ##Markov model to GP integration
 def setup_markov_model(model: MarkovChain):
@@ -219,7 +221,7 @@ def compute_self_bleu_population(stories):
 
     for i in range(len(stories)):
         target_story = stories[i]
-        other_stories = [stories[:i] + stories[i+1:]]
+        other_stories = stories[:i] + stories[i+1:]
 
         bleu_total = 0
         for other_story in other_stories:
@@ -234,3 +236,22 @@ def compute_self_bleu_population(stories):
         return 0.0
     
     return sum(scores) / len(scores)
+
+##now we evaluate the diversity score per story, not just the average of the population
+def compute_self_bleu_individual(stories):
+    individual_scores = []
+
+    for i in range(len(stories)):
+        target_story = stories[i]
+        other_stories = stories[:i] + stories[i+1:]
+
+        bleu_total = 0.0
+        for other_story in other_stories:
+            bleu_total += evaluate_bleu(target_story, other_story)
+            
+        
+        if len(other_stories) == 0:
+            individual_scores.append(0.0)
+        else:
+            individual_scores.append(bleu_total / len(other_stories))
+    return individual_scores
