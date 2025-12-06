@@ -27,22 +27,31 @@ def main():
     markov.educate(text)
     setup_markov_model(markov)
 
-    population = initialize_population(10, 5)
-    stories = [evaluate_tree(individual) for individual in population]
-    self_bleu_scores = compute_self_bleu_individual(stories)
+    final_pop = run_evolution(
+        population_size=15,
+        max_depth=4,
+        generations=5,
+        tournament_size=3,
+        crossover_rate=0.8,
+        mutation_rate=0.2
+    )
 
-    print("\n=== SELF-BLEU TEST ===")
-    for i, ind in enumerate(population):
-        print(f"\n--- Individual {i+1} ---")
-        print_tree(ind)
-        print("STORY:", stories[i])
-        print("WORD COUNT:", len(stories[i].split()))
-        print("SELF-BLEU:", self_bleu_scores[i])
+    best_individual = max(final_pop, key=lambda t: fitness_function(
+        t, [evaluate_tree(i) for i in final_pop],
+        compute_self_bleu_individual([evaluate_tree(i) for i in final_pop]),
+        final_pop.index(t)
+    ))
 
-        # Evaluate creativity fitness (length minus penalty)
-        fitness = fitness_function(ind, stories, self_bleu_scores, index=i)
-        print("CREATIVITY FITNESS:", fitness)
-        print(f"Story {i+1} Grammar Errors:", grammar_check(stories[i]))
-
+    print("\n=== BEST TREE STRUCTURE ===")
+    print_tree(best_individual)
+    print("\n=== BEST STORY ===")
+    print(evaluate_tree(best_individual))
+    print("\n=== BEST FITNESS ===")
+    print(fitness_function(
+        best_individual,
+        [evaluate_tree(i) for i in final_pop],
+        compute_self_bleu_individual([evaluate_tree(i) for i in final_pop]),
+        final_pop.index(best_individual)
+    ))
 if __name__ == "__main__":
     main()

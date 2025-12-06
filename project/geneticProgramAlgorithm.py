@@ -178,7 +178,11 @@ def mutate(tree, max_depth):
         return tree_copy
     
 ##Create a function for Loop of the GP algorithm
-def evolve_population(population, fitness_function, stories, self_bleu_score, max_depth, tournament_size, crossover_rate, mutation_rate):
+def evolve_population(population, fitness_function, max_depth, tournament_size, crossover_rate, mutation_rate):
+
+    stories = [evaluate_tree(individual) for individual in population]
+    self_bleu_score = compute_self_bleu_individual(stories)
+
     def indexed_fitness_function(individual):
         index = population.index(individual)
         return fitness_function(individual, stories, self_bleu_score, index)
@@ -205,25 +209,32 @@ def evolve_population(population, fitness_function, stories, self_bleu_score, ma
 
     return new_population
 
-def run_evolution(population, fitness_function, max_depth):
-    stories = [evaluate_tree(individual) for individual in population]
-    self_bleu_scores = compute_self_bleu_individual(stories)
-    fitness_score = [
-        fitness_function(population[i], stories, self_bleu_scores, i)
-        for i in range(len(population))
-    ]
-    best = max(fitness_score)
-    print(f"Best Fitness Score: {best}")
+def run_evolution(population_size, max_depth, generations, tournament_size=TOURNAMENT_SIZE, crossover_rate=CROSSOVER_RATE, mutation_rate=MUTATION_RATE):
+    population = initialize_population(population_size, max_depth)
 
-    population = evolve_population(
+    for gen in range(generations):
+        print(f"\n=== Generation {gen + 1} ===")
+
+        stories = [evaluate_tree(individual) for individual in population]
+        self_bleu_scores = compute_self_bleu_individual(stories)
+
+        fitness_scores = [fitness_function(population[i], stories, self_bleu_scores, i) for i in range(len(population))]
+
+        best_fitness = max(fitness_scores)
+        avg_fitness = sum(fitness_scores) / len(fitness_scores)
+        best_index = fitness_scores.index(best_fitness)
+
+        print(f"Best Fitness: {best_fitness}")
+        print(f"Average Fitness: {avg_fitness}")
+        print(f"Best Story: {stories[best_index]}\n")
+
+        population = evolve_population(
             population,
             fitness_function,
-            stories,
-            self_bleu_scores,
             max_depth,
-            TOURNAMENT_SIZE,
-            CROSSOVER_RATE,
-            MUTATION_RATE
+            tournament_size,
+            crossover_rate,
+            mutation_rate,
         )
     return population
 
