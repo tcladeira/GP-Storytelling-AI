@@ -8,6 +8,7 @@ from geneticProgramAlgorithm import (
     compute_self_bleu_population,
     initialize_population,
     compute_self_bleu_individual,
+    grammar_check
 
 )
 
@@ -41,6 +42,7 @@ def main():
         # Evaluate creativity fitness (length minus penalty)
         fitness = fitness_function(ind, stories, self_bleu_scores, index=i)
         print("CREATIVITY FITNESS:", fitness)
+        print(f"Story {i+1} Grammar Errors:", grammar_check(stories[i]))
 
 if __name__ == "__main__":
     main()

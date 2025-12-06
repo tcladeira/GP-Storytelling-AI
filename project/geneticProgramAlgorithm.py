@@ -1,5 +1,6 @@
 import random
 import nltk 
+import language_tool_python
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
@@ -7,6 +8,7 @@ from treeStructure import Node
 MARKOV_MODEL = None
 SIMPLE_TEXT = []
 smooth = SmoothingFunction().method1
+grammar_tool = language_tool_python.LanguageTool('en-US')
 
 ##Arbitrary GP parameters
 POP_SIZE = 20
@@ -17,6 +19,8 @@ MUTATION_RATE = 0.2
 GENERATIONS = 10
 
 SELF_BLEU_WEIGHT = 5.0
+
+GRAMMAR_WEIGHT = 0.3
 
 
 ##Markov model to GP integration
@@ -93,11 +97,17 @@ def fitness_function(tree, all_stories=None, self_bleu_score=None, index=None):
     story = evaluate_tree(tree)
     lenghth_score = len(story.split())
 
-    if self_bleu_score is None or index is None:
+    if all_stories is None or self_bleu_score is None or index is None:
         return lenghth_score
     
     diversity_penalty = SELF_BLEU_WEIGHT * self_bleu_score[index]
-    return lenghth_score - diversity_penalty
+
+    grammar_error = grammar_check(story)
+    grammar_penalty = GRAMMAR_WEIGHT * grammar_error
+
+    fitness_score = lenghth_score - diversity_penalty - grammar_error
+
+    return fitness_score
 
 def fitness_key(pair):
     return pair[1]
@@ -265,3 +275,8 @@ def compute_self_bleu_individual(stories):
         else:
             individual_scores.append(bleu_total / len(other_stories))
     return individual_scores
+
+##grammar check function
+def grammar_check(story):
+    matches = grammar_tool.check(story)
+    return len(matches)
