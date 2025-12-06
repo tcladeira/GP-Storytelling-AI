@@ -18,9 +18,9 @@ CROSSOVER_RATE = 0.8
 MUTATION_RATE = 0.2
 GENERATIONS = 10
 
-SELF_BLEU_WEIGHT = 5.0
-
-GRAMMAR_WEIGHT = 0.3
+SELF_BLEU_WEIGHT = 25.0
+LEIGHT_SCORE_WEIGHT = 0.8
+GRAMMAR_WEIGHT = 1.0
 
 
 ##Markov model to GP integration
@@ -96,6 +96,7 @@ def initialize_population(population_size, tree_depth):
 def fitness_function(tree, all_stories=None, self_bleu_score=None, index=None):
     story = evaluate_tree(tree)
     lenghth_score = len(story.split())
+    lenghth_score_weighted = LEIGHT_SCORE_WEIGHT * lenghth_score
 
     if all_stories is None or self_bleu_score is None or index is None:
         return lenghth_score
@@ -105,7 +106,7 @@ def fitness_function(tree, all_stories=None, self_bleu_score=None, index=None):
     grammar_error = grammar_check(story)
     grammar_penalty = GRAMMAR_WEIGHT * grammar_error
 
-    fitness_score = lenghth_score - diversity_penalty - grammar_error
+    fitness_score = lenghth_score_weighted - diversity_penalty - grammar_penalty
 
     return fitness_score
 
