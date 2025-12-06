@@ -26,19 +26,21 @@ def main():
     markov.educate(text)
     setup_markov_model(markov)
 
-    population = initialize_population(5, 3)
-    stories = [evaluate_tree(t) for t in population]
+    population = initialize_population(10, 5)
+    stories = [evaluate_tree(individual) for individual in population]
     self_bleu_scores = compute_self_bleu_individual(stories)
 
-    print("=== Initial Stories ===")
-    for index, s in enumerate(stories):
-        print("\nStory ", index, ":", s)
+    print("\n=== SELF-BLEU TEST ===")
+    for i, ind in enumerate(population):
+        print(f"\n--- Individual {i+1} ---")
+        print_tree(ind)
+        print("STORY:", stories[i])
+        print("WORD COUNT:", len(stories[i].split()))
+        print("SELF-BLEU:", self_bleu_scores[i])
 
-    print("\n=== Stories ===")
-    for i, s in enumerate(self_bleu_scores):
-        print(f"Story {i+1}: {s}")
-
-  
+        # Evaluate creativity fitness (length minus penalty)
+        fitness = fitness_function(ind, stories, self_bleu_scores, index=i)
+        print("CREATIVITY FITNESS:", fitness)
 
 if __name__ == "__main__":
     main()

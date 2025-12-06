@@ -27,7 +27,7 @@ def setup_markov_model(model: MarkovChain):
 
 ##GP finction set for tree representation
 def combine_story(a, b):
-    return a + " . " + b
+    return a + " " + b
 
 def generate_endnode():
     if MARKOV_MODEL is not None:
@@ -195,7 +195,7 @@ def evolve_population(population, fitness_function, stories, self_bleu_score, ma
 
     return new_population
 
-def run_evolution(population_size, fitness_function, generations, max_depth):
+def run_evolution(population, fitness_function, max_depth):
     stories = [evaluate_tree(individual) for individual in population]
     self_bleu_scores = compute_self_bleu_individual(stories)
     fitness_score = [
@@ -211,7 +211,7 @@ def run_evolution(population_size, fitness_function, generations, max_depth):
             stories,
             self_bleu_scores,
             max_depth,
-            tournament_size,
+            TOURNAMENT_SIZE,
             CROSSOVER_RATE,
             MUTATION_RATE
         )
