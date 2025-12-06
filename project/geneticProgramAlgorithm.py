@@ -1,9 +1,12 @@
 import random
+import nltk 
+from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
 
 MARKOV_MODEL = None
 SIMPLE_TEXT = []
+smooth = SmoothingFunction().method1
 
 ##Arbitrary GP parameters
 POP_SIZE = 20
@@ -201,3 +204,33 @@ def run_evolution(population_size, fitness_function, generations, max_depth):
             max_depth=max_depth
         )
     return population
+
+##Use function to alter fitness function. SELF-BLEU for evaluating diversity
+##First, self-bleu for two stories
+def evaluate_bleu(story1, story2):
+    reference = [story2.split()]
+    candidate = story1.split()
+    bleu_score = sentence_bleu(reference, candidate, smoothing_function=smooth)
+    return bleu_score
+
+##now, self-bleu for set of population of stories
+def compute_self_bleu_population(stories):
+    scores = []
+
+    for i in range(len(stories)):
+        target_story = stories[i]
+        other_stories = [stories[:i] + stories[i+1:]]
+
+        bleu_total = 0
+        for other_story in other_stories:
+            bleu = evaluate_bleu(target_story, other_story)
+            bleu_total += bleu
+        
+        if len(other_stories) > 0:
+            average_bleu = bleu_total / len(other_stories)
+            scores.append(average_bleu)
+    
+    if len(scores) == 0:
+        return 0.0
+    
+    return sum(scores) / len(scores)
