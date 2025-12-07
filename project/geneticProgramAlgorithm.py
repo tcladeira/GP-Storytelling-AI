@@ -5,6 +5,7 @@ import language_tool_python
 from sentence_transformers import SentenceTransformer, util
 coherence_model = SentenceTransformer('all-MiniLM-L6-v2')
 from clean_text import clean_text
+import nltk
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
@@ -227,6 +228,9 @@ def evolve_population(population, fitness_function, max_depth, tournament_size, 
 def run_evolution(population_size, max_depth, generations, tournament_size=TOURNAMENT_SIZE, crossover_rate=CROSSOVER_RATE, mutation_rate=MUTATION_RATE):
     population = initialize_population(population_size, max_depth)
 
+    best_fitness_group = []
+    avg_fitness_group = []
+
     for gen in range(generations):
         print(f"\n=== Generation {gen + 1} ===")
 
@@ -243,6 +247,11 @@ def run_evolution(population_size, max_depth, generations, tournament_size=TOURN
         print(f"Average Fitness: {avg_fitness}")
         print(f"Best Story: {stories[best_index]}\n")
 
+        
+
+        best_fitness_group.append(best_fitness)
+        avg_fitness_group.append(avg_fitness)
+
         population = evolve_population(
             population,
             fitness_function,
@@ -251,7 +260,7 @@ def run_evolution(population_size, max_depth, generations, tournament_size=TOURN
             crossover_rate,
             mutation_rate,
         )
-    return population
+    return population, best_fitness_group, avg_fitness_group
 
 ##Use function to alter fitness function. SELF-BLEU for evaluating diversity
 ##First, self-bleu for two stories

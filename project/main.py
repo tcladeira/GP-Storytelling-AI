@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from markovAlgorithm import MarkovChain
 from geneticProgramAlgorithm import (
     evaluate_tree,
@@ -24,10 +25,10 @@ def main():
     markov.educate(cleaned_text)
     setup_markov_model(markov)
 
-    final_pop = run_evolution(
+    final_pop, best_fitness_value, average_fitness = run_evolution(
         population_size=15,
         max_depth=4,
-        generations=5,
+        generations=10,
         tournament_size=3,
         crossover_rate=0.8,
         mutation_rate=0.2
@@ -50,5 +51,16 @@ def main():
         compute_self_bleu_individual([evaluate_tree(i) for i in final_pop]),
         final_pop.index(best_individual)
     ))
+
+
+    plt.plot(best_fitness_value, label="Best Fitness", marker='o')
+    plt.plot(average_fitness, label="Average Fitness", marker='x')
+    plt.title("GP Story Evolution Fitness over Generations")
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness Score")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 if __name__ == "__main__":
     main()
