@@ -5,10 +5,7 @@ from geneticProgramAlgorithm import (
     fitness_function,
     print_tree,
     run_evolution,
-    compute_self_bleu_population,
-    initialize_population,
     compute_self_bleu_individual,
-    grammar_check,
     load_book_to_markov,
     extract_real_sentences,
     setup_terminal_sentences
