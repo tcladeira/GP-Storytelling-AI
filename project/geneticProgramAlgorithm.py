@@ -8,7 +8,6 @@ from clean_text import clean_text
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from markovAlgorithm import MarkovChain
 from treeStructure import Node
-import nltk
 from nltk.tokenize import sent_tokenize
 
 MARKOV_MODEL = None
