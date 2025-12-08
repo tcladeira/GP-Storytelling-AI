@@ -53,14 +53,14 @@ def main():
     ))
 
 
-    plt.plot(best_fitness_value, label="Best Fitness", marker='o')
-    plt.plot(average_fitness, label="Average Fitness", marker='x')
-    plt.title("GP Story Evolution Fitness over Generations")
-    plt.xlabel("Generation")
-    plt.ylabel("Fitness Score")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+    # plt.plot(best_fitness_value, label="Best Fitness", marker='o')
+    # plt.plot(average_fitness, label="Average Fitness", marker='x')
+    # plt.title("GP Story Evolution Fitness over Generations")
+    # plt.xlabel("Generation")
+    # plt.ylabel("Fitness Score")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
 
 if __name__ == "__main__":
     main()
